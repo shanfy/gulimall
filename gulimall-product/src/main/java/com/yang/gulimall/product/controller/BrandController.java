@@ -2,12 +2,13 @@ package com.yang.gulimall.product.controller;
 
 import com.yang.common.utils.PageUtils;
 import com.yang.common.utils.R;
+import com.yang.common.validator.group.AddGroup;
 import com.yang.gulimall.product.entity.BrandEntity;
 import com.yang.gulimall.product.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class BrandController {
      * 不使用BindingResult接收结果时，校验异常将被抛出
      */
     @RequestMapping("/save")
-    public R save(@RequestBody @Valid BrandEntity brand
+    public R save(@RequestBody @Validated(AddGroup.class) BrandEntity brand
             // ,BindingResult result
     ){
         /*if(result.hasErrors()){
