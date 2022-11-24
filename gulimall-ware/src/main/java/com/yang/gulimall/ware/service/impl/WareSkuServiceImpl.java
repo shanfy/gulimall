@@ -3,6 +3,7 @@ package com.yang.gulimall.ware.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yang.common.to.SkuHasStockVo;
 import com.yang.common.utils.PageUtils;
 import com.yang.common.utils.Query;
 import com.yang.common.utils.R;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service("wareSkuService")
@@ -81,5 +83,18 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             wareSkuDao.addStock(skuId,wareId,skuNum);
         }
 
+    }
+
+    @Override
+    public List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds) {
+
+        List<SkuHasStockVo> skuHasStockVos = skuIds.stream().map(item -> {
+            Long count = this.baseMapper.getSkuStock(item);
+            SkuHasStockVo skuHasStockVo = new SkuHasStockVo();
+            skuHasStockVo.setSkuId(item);
+            skuHasStockVo.setHasStock(count == null?false:count > 0);
+            return skuHasStockVo;
+        }).collect(Collectors.toList());
+        return skuHasStockVos;
     }
 }
