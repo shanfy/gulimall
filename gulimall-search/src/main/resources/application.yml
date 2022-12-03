@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: gulimall-search
-#  cloud:
-#    nacos:
-#      discovery:
-#        server-addr: 192.168.66.66:8848
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.66.66:8848

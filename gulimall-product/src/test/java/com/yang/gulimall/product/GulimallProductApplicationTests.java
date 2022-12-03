@@ -6,8 +6,12 @@ import com.yang.gulimall.product.service.BrandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 // @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -15,6 +19,21 @@ class GulimallProductApplicationTests {
 
     @Autowired
     BrandService brandService;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Test
+    public void testStringRedis() {
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+
+        //保存
+        ops.set("hello","world_" + UUID.randomUUID().toString());
+
+        //查询
+        String hello = ops.get("hello");
+        System.out.println("之前保存的数据:"+hello);
+    }
 
    /* @Autowired(required = false)
     private OSSClient ossClient;

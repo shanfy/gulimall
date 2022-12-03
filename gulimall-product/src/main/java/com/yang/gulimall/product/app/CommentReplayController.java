@@ -1,10 +1,9 @@
-package com.yang.gulimall.product.controller;
+package com.yang.gulimall.product.app;
 
 import com.yang.common.utils.PageUtils;
 import com.yang.common.utils.R;
-import com.yang.gulimall.product.entity.SpuInfoEntity;
-import com.yang.gulimall.product.service.SpuInfoService;
-import com.yang.gulimall.product.vo.SpuSaveVo;
+import com.yang.gulimall.product.entity.CommentReplayEntity;
+import com.yang.gulimall.product.service.CommentReplayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,26 +13,25 @@ import java.util.Map;
 
 
 /**
- * spu信息
+ * 商品评价回复关系
  *
  * @author shanfy
  * @email 815481278@qq.com
  * @date 2022-03-26 17:59:21
  */
 @RestController
-@RequestMapping("product/spuinfo")
-public class SpuInfoController {
+@RequestMapping("product/commentreplay")
+public class CommentReplayController {
     @Autowired
-    private SpuInfoService spuInfoService;
+    private CommentReplayService commentReplayService;
 
     /**
      * 列表
      */
     @RequestMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        // PageUtils page = spuInfoService.queryPage(params);
+        PageUtils page = commentReplayService.queryPage(params);
 
-        PageUtils page = spuInfoService.queryPageByCondition(params);
         return R.ok().put("page", page);
     }
 
@@ -43,18 +41,18 @@ public class SpuInfoController {
      */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id){
-		SpuInfoEntity spuInfo = spuInfoService.getById(id);
+		CommentReplayEntity commentReplay = commentReplayService.getById(id);
 
-        return R.ok().put("spuInfo", spuInfo);
+        return R.ok().put("commentReplay", commentReplay);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    public R save(@RequestBody SpuSaveVo vo){
-		// spuInfoService.save(spuInfo);
-        spuInfoService.saveSpuInfo(vo);
+    public R save(@RequestBody CommentReplayEntity commentReplay){
+		commentReplayService.save(commentReplay);
+
         return R.ok();
     }
 
@@ -62,8 +60,8 @@ public class SpuInfoController {
      * 修改
      */
     @RequestMapping("/update")
-    public R update(@RequestBody SpuInfoEntity spuInfo){
-		spuInfoService.updateById(spuInfo);
+    public R update(@RequestBody CommentReplayEntity commentReplay){
+		commentReplayService.updateById(commentReplay);
 
         return R.ok();
     }
@@ -73,7 +71,7 @@ public class SpuInfoController {
      */
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] ids){
-		spuInfoService.removeByIds(Arrays.asList(ids));
+		commentReplayService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

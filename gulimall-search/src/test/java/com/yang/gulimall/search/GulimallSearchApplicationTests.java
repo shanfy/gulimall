@@ -6,8 +6,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -175,11 +176,21 @@ public class GulimallSearchApplicationTests {
         String jsonString = JSON.toJSONString(user1);
         indexRequest.source(jsonString, XContentType.JSON);  //要保存的内容
 
+
+        IndexRequest indexRequest1 = new IndexRequest("users");
+        indexRequest1.source(JSON.toJSONString(user2), XContentType.JSON);
+        BulkRequest bulkRequest = new BulkRequest();
+        bulkRequest.add(indexRequest);
+        bulkRequest.add(indexRequest1);
+        BulkResponse bulk = client.bulk(bulkRequest, GulimallElasticSearchConfig.COMMON_OPTIONS);
+
+        System.out.println(bulk);
+
         //执行操作
-        IndexResponse index = client.index(indexRequest, GulimallElasticSearchConfig.COMMON_OPTIONS);
+//        IndexResponse index = client.index(indexRequest, GulimallElasticSearchConfig.COMMON_OPTIONS);
 
         //提取有用的响应数据
-        System.out.println(index);
+//        System.out.println(index);
 
     }
 
