@@ -52,6 +52,65 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @ControllerAdvice
  *  1）、编写异常处理类，使用@ControllerAdvice。
  *  2）、使用@ExceptionHandler标注方法可以处理的异常。
+ *
+ *
+ *  7、整合redisson作为redis分布式锁等功能框架
+ *      1）、引入依赖
+*          <dependency>
+ *             <groupId>org.redisson</groupId>
+ *             <artifactId>redisson</artifactId>
+ *             <version>3.12.0</version>
+ *         </dependency>
+ *      2）、配置redisson
+ *      3)、使用，参照文档
+ *  8、整合SpringCache简化缓存开发
+ *      1）、引入依赖
+ *           redis依赖+cache依赖
+*           <dependency>
+ *             <groupId>org.springframework.boot</groupId>
+ *             <artifactId>spring-boot-starter-data-redis</artifactId>
+ *             <exclusions>
+ *                 <exclusion>
+ *                     <groupId>io.lettuce</groupId>
+ *                     <artifactId>lettuce-core</artifactId>
+ *                 </exclusion>
+ *             </exclusions>
+ *         </dependency>
+ *             <dependency>
+ *             <groupId>org.springframework.boot</groupId>
+ *             <artifactId>spring-boot-starter-cache</artifactId>
+ *         </dependency>
+ *     2）、写配置(自动配置类：CacheAutoConfiguration)
+ *          CacheAutoConfiguration会导入RedisCacheConfiguration；
+ *          自动配置了缓存管理器 RedisCacheManager；
+ *          手动配置使用redis作为缓存：
+ *          spring.cache.type=redis
+ *          #spring.cache.cache-names=qq,毫秒为单位
+ *          spring.cache.redis.time-to-live=3600000
+ *           #如果指定了前缀就用我们指定的前缀，如果没有就默认使用缓存的名字作为前缀
+ *          #spring.cache.redis.key-prefix=CACHE_
+ *          spring.cache.redis.use-key-prefix=true
+ *          #是否缓存空值，防止缓存穿透
+ *          spring.cache.redis.cache-null-values=true
+ *     3）、测试通过注解使用缓存
+ *          @Cacheable ： 触发将数据保存到缓存的操作
+ *          @CacheEvict ： 触发将数据从缓存删除的操作
+ *          @CachePut ：不影响方法执行更新缓存
+ *          @Caching ： 组合以上多个操作
+ *          @CacheConfig ： 在类级别共享缓存的相同配置
+ *          1） @EnableCaching 开启缓存功能
+ *          2) 只需要使用注解就能完成缓存操作
+ *      4）、原理
+ *          CacheAutoConfiguration-》RedisCacheConfiguration
+ *          -》初始化所有的缓存，每个缓存决定使用什么配置
+ *          -》如果RedisCacheConfiguration已经有就用现有的，否则使用默认的
+ *          -》想更改缓存配置，只需要给容器放入自定义的RedisCacheConfiguration即可
+ *          -》就会应用到当前RedisCacheManager管理的所有的缓存分区中
+ *
+ *
+ *
+ *
+ *
  */
 @SpringBootApplication
 @MapperScan("com.yang.gulimall.product.dao")
