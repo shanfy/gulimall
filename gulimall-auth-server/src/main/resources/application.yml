@@ -1,0 +1,28 @@
+server:
+  port: 20000
+  servlet:
+    session:
+      timeout: 30m
+spring:
+  application:
+    name: gulimall-auth-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.66.66:8848
+  thymeleaf:
+    cache: false
+
+# 配置redis
+  redis:
+    host: 192.168.66.66
+    port: 6379
+    database: 0
+  session:
+    store-type: redis
+#暴露所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

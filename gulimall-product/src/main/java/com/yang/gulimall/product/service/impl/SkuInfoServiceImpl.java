@@ -5,20 +5,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yang.common.utils.PageUtils;
 import com.yang.common.utils.Query;
-import com.yang.common.utils.R;
 import com.yang.gulimall.product.dao.SkuInfoDao;
 import com.yang.gulimall.product.entity.SkuImagesEntity;
 import com.yang.gulimall.product.entity.SkuInfoEntity;
 import com.yang.gulimall.product.entity.SpuInfoDescEntity;
 import com.yang.gulimall.product.feign.SeckillFeignService;
 import com.yang.gulimall.product.service.*;
-import com.yang.gulimall.product.vo.SeckillSkuVo;
 import com.yang.gulimall.product.vo.SkuItemSaleAttrVo;
 import com.yang.gulimall.product.vo.SkuItemVo;
 import com.yang.gulimall.product.vo.SpuItemAttrGroupVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import com.alibaba.fastjson.TypeReference;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -173,7 +170,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             skuItemVo.setImages(imagesEntities);
         }, executor);
 
-        CompletableFuture<Void> seckillFuture = CompletableFuture.runAsync(() -> {
+       /* CompletableFuture<Void> seckillFuture = CompletableFuture.runAsync(() -> {
             //3、远程调用查询当前sku是否参与秒杀优惠活动
             R skuSeckilInfo = seckillFeignService.getSkuSeckilInfo(skuId);
             if (skuSeckilInfo.getCode() == 0) {
@@ -189,11 +186,11 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
                     }
                 }
             }
-        }, executor);
+        }, executor);*/
 
 
         //等到所有任务都完成
-        CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture,seckillFuture).get();
+        CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture).get();
 
         return skuItemVo;
     }

@@ -1,10 +1,16 @@
 package com.yang.gulimall.member.controller;
 
+import com.yang.common.exception.BizCodeEnume;
 import com.yang.common.utils.PageUtils;
 import com.yang.common.utils.R;
 import com.yang.gulimall.member.entity.MemberEntity;
+import com.yang.gulimall.member.exception.PhoneException;
+import com.yang.gulimall.member.exception.UsernameException;
 import com.yang.gulimall.member.feign.CouponFeignService;
 import com.yang.gulimall.member.service.MemberService;
+import com.yang.gulimall.member.vo.MemberUserLoginVo;
+import com.yang.gulimall.member.vo.MemberUserRegisterVo;
+import com.yang.gulimall.member.vo.SocialUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +34,58 @@ public class MemberController {
 
     @Autowired
     CouponFeignService couponFeignService;
+
+
+    @PostMapping(value = "/register")
+    public R register(@RequestBody MemberUserRegisterVo vo) {
+
+        try {
+            memberService.register(vo);
+        } catch (PhoneException e) {
+            return R.error(BizCodeEnume.PHONE_EXIST_EXCEPTION.getCode(),BizCodeEnume.PHONE_EXIST_EXCEPTION.getMsg());
+        } catch (UsernameException e) {
+            return R.error(BizCodeEnume.USER_EXIST_EXCEPTION.getCode(),BizCodeEnume.USER_EXIST_EXCEPTION.getMsg());
+        }
+
+        return R.ok();
+    }
+
+
+    @PostMapping(value = "/login")
+    public R login(@RequestBody MemberUserLoginVo vo) {
+
+        MemberEntity memberEntity = memberService.login(vo);
+
+        if (memberEntity != null) {
+            return R.ok().setData(memberEntity);
+        } else {
+            return R.error(BizCodeEnume.LOGINACCT_PASSWORD_EXCEPTION.getCode(),BizCodeEnume.LOGINACCT_PASSWORD_EXCEPTION.getMsg());
+        }
+    }
+
+
+    @PostMapping(value = "/oauth2/login")
+    public R oauthLogin(@RequestBody SocialUser socialUser) throws Exception {
+
+        MemberEntity memberEntity = memberService.login(socialUser);
+
+        if (memberEntity != null) {
+            return R.ok().setData(memberEntity);
+        } else {
+            return R.error(BizCodeEnume.LOGINACCT_PASSWORD_EXCEPTION.getCode(),BizCodeEnume.LOGINACCT_PASSWORD_EXCEPTION.getMsg());
+        }
+    }
+
+    @PostMapping(value = "/weixin/login")
+    public R weixinLogin(@RequestParam("accessTokenInfo") String accessTokenInfo) {
+
+        MemberEntity memberEntity = memberService.login(accessTokenInfo);
+        if (memberEntity != null) {
+            return R.ok().setData(memberEntity);
+        } else {
+            return R.error(BizCodeEnume.LOGINACCT_PASSWORD_EXCEPTION.getCode(),BizCodeEnume.LOGINACCT_PASSWORD_EXCEPTION.getMsg());
+        }
+    }
 
     @GetMapping("/coupons")
     public R test(){
