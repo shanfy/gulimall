@@ -4,7 +4,9 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
  * 使用RabbitMQ
@@ -34,10 +36,12 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  *          vgroup_mapping.{application.name}-fescar-server-group = "default"
  *      5、启动测试分布式事务
  *      6、给分布式大事务的入口标注@GlobalTransactional
- *      7、每一个远程的小事务用@Trabsactional
+ *      7、每一个远程的小事务用@Transactional
  */
 @EnableAspectJAutoProxy(exposeProxy = true)
+@EnableRedisHttpSession     //开启springsession
 @EnableRabbit
+@EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
 public class GulimallOrderApplication {

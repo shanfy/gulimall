@@ -1,17 +1,19 @@
 package com.yang.gulimall.ware.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import com.yang.common.exception.BizCodeEnume;
+import com.yang.common.exception.NoStockException;
 import com.yang.common.to.SkuHasStockVo;
+import com.yang.common.utils.PageUtils;
+import com.yang.common.utils.R;
+import com.yang.gulimall.ware.entity.WareSkuEntity;
+import com.yang.gulimall.ware.service.WareSkuService;
+import com.yang.gulimall.ware.vo.WareSkuLockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.yang.gulimall.ware.entity.WareSkuEntity;
-import com.yang.gulimall.ware.service.WareSkuService;
-import com.yang.common.utils.PageUtils;
-import com.yang.common.utils.R;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -27,6 +29,28 @@ import com.yang.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    /**
+     * 锁定库存
+     * @param vo
+     *
+     * 库存解锁的场景
+     *      1）、下订单成功，订单过期没有支付被系统自动取消或者被用户手动取消，都要解锁库存
+     *      2）、下订单成功，库存锁定成功，接下来的业务调用失败，导致订单回滚。之前锁定的库存就要自动解锁
+     *      3）、
+     *
+     * @return
+     */
+    @PostMapping(value = "/lock/order")
+    public R orderLockStock(@RequestBody WareSkuLockVo vo) {
+
+        try {
+            boolean lockStock = wareSkuService.orderLockStock(vo);
+            return R.ok().setData(lockStock);
+        } catch (NoStockException e) {
+            return R.error(BizCodeEnume.NO_STOCK_EXCEPTION.getCode(),BizCodeEnume.NO_STOCK_EXCEPTION.getMsg());
+        }
+    }
 
     /**
      * 查询sku是否有库存
