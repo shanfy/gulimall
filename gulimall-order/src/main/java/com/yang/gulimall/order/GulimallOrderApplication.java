@@ -37,6 +37,14 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  *      5、启动测试分布式事务
  *      6、给分布式大事务的入口标注@GlobalTransactional
  *      7、每一个远程的小事务用@Transactional
+ *
+ *      本地事务失效问题
+ * 同一个对象内事务方法互调默认失效，原因 绕过了代理对象，事务使用代理对象来控制的
+ * 解决:使用代理对象来调用事务方法
+ * 1)、引入aop-starter;spring-boot-starter-aop;引入了aspectj
+ * 2)、@EnableAspectJAutoProxv;开启aspecti 动态代理功能。以后所有的动态代理都是gspecti创建的(即使没有接门也能创建动态代理对象)
+ * 3)、用调用对象本类互调
+ * eg：Object o =AopContext.currentProxy();
  */
 @EnableAspectJAutoProxy(exposeProxy = true)
 @EnableRedisHttpSession     //开启springsession
