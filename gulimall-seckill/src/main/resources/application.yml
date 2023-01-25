@@ -10,12 +10,12 @@ spring:
       discovery:
         server-addr: 192.168.66.66:8848
 
-#    sentinel:
-#      transport:
-#        #配置sentinel dashboard地址
-#        dashboard: localhost:8080
-#        #默认8719端口，假如被占用会自动从8719开始依次+1扫描，直至找到未被占用的端口
-#        port: 8719
+    sentinel:
+      transport:
+        #配置sentinel dashboard地址
+        dashboard: 192.168.66.66:8080
+        #默认8719端口，假如被占用会自动从8719开始依次+1扫描，直至找到未被占用的端口
+        port: 8719
 
   redis:
     host: 192.168.66.66
@@ -23,9 +23,9 @@ spring:
 
 
 #开启feign对sentinel的支持
-#feign:
-#  sentinel:
-#    enabled: true
+feign:
+  sentinel:
+    enabled: true
 
   #配置异步任务线程池
   task:
@@ -44,3 +44,13 @@ management:
     web:
       exposure:
         include: '*'
+
+
+#开启debug日志
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          openfeign: debug
+          sleuth: debug

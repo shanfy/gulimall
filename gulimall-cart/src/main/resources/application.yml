@@ -15,6 +15,14 @@ spring:
     host: 192.168.66.66
   session:
     store-type: redis
+  zipkin:
+    base-url: http://192.168.66.66:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1
 
 #配置线程池
 gulimall:
@@ -29,5 +37,16 @@ management:
     web:
       exposure:
         include: '*'
+feign:
+  sentinel:
+    enabled: true
 
+#开启debug日志
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          openfeign: debug
+          sleuth: debug
 

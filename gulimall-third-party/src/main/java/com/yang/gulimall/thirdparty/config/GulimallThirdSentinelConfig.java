@@ -1,4 +1,4 @@
-package com.yang.gulimall.ware.config;
+package com.yang.gulimall.thirdparty.config;
 
 import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Description: 自定义阻塞返回方法
  **/
 @Configuration
-public class GulimallWareSentinelConfig {
+public class GulimallThirdSentinelConfig {
 
     /*public GulimallSeckillSentinelConfig() {
 
@@ -32,7 +32,7 @@ public class GulimallWareSentinelConfig {
         });
 
     }*/
-    @Bean(name = "wareSentinelExceptionHandler")
+    @Bean(name = "thirdSentinelExceptionHandler")
     public BlockExceptionHandler customSentinelExceptionHandler(){
         return new BlockExceptionHandler() {
             @Override

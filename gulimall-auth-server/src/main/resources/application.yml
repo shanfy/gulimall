@@ -12,8 +12,15 @@ spring:
         server-addr: 192.168.66.66:8848
   thymeleaf:
     cache: false
-
-# 配置redis
+  zipkin:
+    base-url: http://192.168.66.66:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1
+  # 配置redis
   redis:
     host: 192.168.66.66
     port: 6379
@@ -26,3 +33,15 @@ management:
     web:
       exposure:
         include: '*'
+feign:
+  sentinel:
+    enabled: true
+
+#开启debug日志
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          openfeign: debug
+          sleuth: debug

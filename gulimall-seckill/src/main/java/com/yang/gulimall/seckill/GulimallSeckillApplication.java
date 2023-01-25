@@ -29,7 +29,9 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  *              //业务逻辑
  *          } catch(Exception e) {}
  *
- *  2）、基于注解
+ * 2)、基于注解。
+ * SentinelResource(value = "getCurrentSeckillSkusResource",blockHandler = "blockHandler")
+ * 无论是1,2方式一定要配置被限流以后的默认返回urL请求可以设置统一返回
  *
  */
 
